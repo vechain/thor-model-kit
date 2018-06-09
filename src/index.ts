@@ -1,2 +1,2 @@
-export { Bytes, BigInt, Bytes32, Address } from './lib/types'
+export {  BigInt, Bytes32, Address } from './lib/types'
 
