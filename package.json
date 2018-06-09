@@ -1,0 +1,32 @@
+{
+  "name": "thor-model-kit",
+  "version": "0.1.0",
+  "description": "Typescript library defines VeChainThor data models",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vechain/thor-model-kit.git"
+  },
+  "keywords": [
+    "vechain",
+    "blockchain",
+    "model"
+  ],
+  "author": "vechain.org",
+  "license": "LGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/vechain/thor-model-kit/issues"
+  },
+  "homepage": "https://github.com/vechain/thor-model-kit#readme",
+  "devDependencies": {
+    "@types/node": "^10.3.2",
+    "ts-node": "^6.1.0",
+    "typescript": "^2.9.1"
+  },
+  "dependencies": {
+    "bignumber.js": "^7.2.1"
+  }
+}
