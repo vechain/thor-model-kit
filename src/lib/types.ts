@@ -1,62 +1,20 @@
 
-import { BigNumber } from 'bignumber.js'
+import BigNumber from 'bignumber.js'
 
-/**
- * Bytes class.
- */
-export class Bytes {
-    private static readonly isHex = /^[0-9a-f]*$/i
+const hexRegEx = /^[0-9a-f]*$/i
 
-    /**
-     * parse hex string to Bytes.
-     * @param hex hex string
-     * @param prefix prefix to match against, defaults to '0x'
-     */
-    static from(hex: string, prefix = '0x') {
-        if (!hex.startsWith(prefix))
-            throw new Error('prefix mismatch')
+function hexToBuffer(hex: string, prefix = '0x') {
+    if (!hex.startsWith(prefix))
+        throw new Error('prefix mismatch')
 
-        hex = hex.substr(prefix.length)
-        if (!Bytes.isHex.test(hex))
-            throw new Error('not hex format')
+    hex = hex.substr(prefix.length)
+    if (!hexRegEx.test(hex))
+        throw new Error('not in hex format')
 
-        if (hex.length % 2 != 0) {
-            throw new Error('odd hex')
-        }
-        return new Bytes(new Buffer(hex, 'hex'))
+    if (hex.length % 2 != 0) {
+        throw new Error('odd hex')
     }
-
-    /** the underlying value */
-    readonly buffer: Buffer
-
-    /**
-     * construct Bytes object from a buffer.
-     * @param buf 
-     */
-    constructor(buf: Buffer) {
-        this.buffer = buf
-    }
-
-    /**
-     * convert to string presentation, in hex form.
-     * @param prefix prefix added before string, defaults to '0x'
-     */
-    toString(prefix = '0x') {
-        return (prefix || '') + this.buffer.toString('hex')
-    }
-
-    /**
-     * return a new Bytes object, for which bytes equal to `v` from the left end are removed.
-     * @param v defaults to 0
-     */
-    trimLeft(v = 0) {
-        let i = 0
-        for (; i < this.buffer.length; i++) {
-            if (this.buffer[i] != v)
-                break
-        }
-        return new Bytes(this.buffer.slice(i))
-    }
+    return new Buffer(hex, 'hex')
 }
 
 /**
@@ -68,27 +26,27 @@ export class Address {
      * @param hex the hex string
      * @param prefix prefix to match against, defaults to '0x'
      */
-    static from(hex: string, prefix = '0x') {
-        let bytes = Bytes.from(hex, prefix)
-        if (bytes.buffer.length != 20)
+    static fromHex(hex: string, prefix = '0x') {
+        let bytes = hexToBuffer(hex, prefix)
+        if (bytes.length != 20)
             throw new Error('address should be 20 bytes')
 
-        return new Address(bytes.buffer)
+        return new Address(bytes)
     }
 
     /** the underlying value */
-    readonly buffer: Buffer
+    readonly bytes: Buffer
 
     /**
-     * construct Address object from buffer.
-     * @param buf 
+     * construct Address object from Buffer.
+     * @param bytes 
      */
-    constructor(buf: Buffer) {
-        let newBuf = new Buffer(20)
-        buf.copy(newBuf,
-            newBuf.length > buf.length ? newBuf.length - buf.length : 0,
-            buf.length > newBuf.length ? buf.length - newBuf.length : 0)
-        this.buffer = newBuf
+    constructor(bytes: Buffer) {
+        let b20 = new Buffer(20)
+        bytes.copy(b20,
+            b20.length > bytes.length ? b20.length - bytes.length : 0,
+            bytes.length > b20.length ? bytes.length - b20.length : 0)
+        this.bytes = b20
     }
 
     /**
@@ -96,7 +54,7 @@ export class Address {
      * @param prefix prefix added before string, defaults to '0x'
      */
     toString(prefix = '0x') {
-        return (prefix || '') + this.buffer.toString('hex')
+        return (prefix || '') + this.bytes.toString('hex')
     }
 }
 
@@ -109,40 +67,40 @@ export class Bytes32 {
      * @param hex the hex string
      * @param prefix prefix to match against, defaults to '0x'
      */
-    static from(hex: string, prefix = '0x') {
-        let bytes = Bytes.from(hex, prefix)
-        if (bytes.buffer.length != 32)
+    static fromHex(hex: string, prefix = '0x') {
+        let bytes = hexToBuffer(hex, prefix)
+        if (bytes.length != 32)
             throw new Error('bytes32 should be 32 bytes')
 
-        return new Bytes32(bytes.buffer)
+        return new Bytes32(bytes)
     }
     /** the underlying value */
-    readonly buffer: Buffer
+    readonly bytes: Buffer
 
     /**
-     * construct Bytes32 object from buffer.
-     * @param buf 
+     * construct Bytes32 object from Buffer.
+     * @param bytes 
      */
-    constructor(buf: Buffer) {
-        let newBuf = new Buffer(32)
-        buf.copy(newBuf,
-            newBuf.length > buf.length ? newBuf.length - buf.length : 0,
-            buf.length > newBuf.length ? buf.length - newBuf.length : 0)
-        this.buffer = newBuf
+    constructor(bytes: Buffer) {
+        let b32 = new Buffer(32)
+        bytes.copy(b32,
+            b32.length > bytes.length ? b32.length - bytes.length : 0,
+            bytes.length > b32.length ? bytes.length - b32.length : 0)
+        this.bytes = b32
     }
 
-     /**
-     * convert to string presentation, in hex form.
-     * @param prefix prefix added before string, defaults to '0x'
-     */
+    /**
+    * convert to string presentation, in hex form.
+    * @param prefix prefix added before string, defaults to '0x'
+    */
     toString(prefix = '0x') {
-        return (prefix || '') + this.buffer.toString('hex')
+        return (prefix || '') + this.bytes.toString('hex')
     }
 }
 
 
 /**
- * BigInt class.
+ * BigInt class presents non-negative big integer
  */
 export class BigInt {
     /**
@@ -158,6 +116,9 @@ export class BigInt {
         } else {
             bn = v
         }
+        if (bn.isNegative()) {
+            throw new Error('negative number')
+        }
         if (!bn.isInteger()) {
             throw new Error('not a integer')
         }
@@ -168,29 +129,35 @@ export class BigInt {
         return new BigInt(new Buffer(hex, 'hex'))
     }
     /** the underlying value */
-    readonly buffer: Buffer
+    readonly bytes: Buffer
 
     /**
-     * construct BigInt object from buffer.
-     * @param buf 
+     * construct BigInt object from Buffer.
+     * @param bytes 
      */
-    constructor(buf: Buffer) {
-        this.buffer = new Bytes(buf).trimLeft().buffer
+    constructor(bytes: Buffer) {
+        // trim leading zero
+        let i = 0
+        for (; i < bytes.length; i++) {
+            if (bytes[i] != 0)
+                break
+        }
+        this.bytes = bytes.slice(i)
     }
 
     /**
      * convert to BigNumber
      */
-    toBigNumber(): BigNumber {
-        return new BigNumber(this.buffer.toString('hex'), 16)
+    toBigNumber() {
+        return new BigNumber(this.bytes.toString('hex'), 16)
     }
 
     /**
      * convert to string
      * @param base the base, 16 or 10
      */
-    toString(base: 16 | 10 = 16): string {
-        let prefix = (base == 16) ? '0x' : ''
+    toString(base: 16 | 10 = 16) {
+        let prefix = (base === 16) ? '0x' : ''
         return prefix + this.toBigNumber().toString(base)
     }
 }
