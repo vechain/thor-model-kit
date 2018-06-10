@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { Address, Bytes32, BigInt } from '../src/lib/types'
+import { Address, Bytes32, BigInt } from '../src'
 import BigNumber from 'bignumber.js';
 
 describe('Address', () => {
