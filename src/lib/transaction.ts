@@ -38,7 +38,7 @@ export class Transaction {
                 this.signer.bytes,
             )
         } catch{
-            return new Bytes32(new Buffer(0))
+            return new Bytes32(Buffer.alloc(0))
         }
     }
 
@@ -257,7 +257,7 @@ function decodeBlockRef(data: any) {
     let bi = decodeBigInt(data)
     if (bi.bytes.length > 8)
         throw new Error('blockRef: too long')
-    let buf = new Buffer(8)
+    let buf = Buffer.alloc(8)
     bi.bytes.copy(buf, buf.length - bi.bytes.length)
     return buf
 }

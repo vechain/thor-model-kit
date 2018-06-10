@@ -4,16 +4,16 @@ import BigNumber from 'bignumber.js';
 
 describe('Address', () => {
     const pureHex = '7567d83b7b8d80addcb281a71d54fc7b3364ffed'
-    const bytes = new Buffer(pureHex, 'hex')
+    const bytes = Buffer.from(pureHex, 'hex')
 
     it('constructor', () => {
         expect(new Address(bytes).bytes).deep.equal(bytes)
 
-        let longer = new Buffer('ff' + pureHex, 'hex')
+        let longer = Buffer.from('ff' + pureHex, 'hex')
         expect(new Address(longer).bytes).deep.equal(bytes)
 
-        let shorter = new Buffer('fc7b3364ffed', 'hex')
-        let extended = new Buffer('0000000000000000000000000000fc7b3364ffed', 'hex')
+        let shorter = Buffer.from('fc7b3364ffed', 'hex')
+        let extended = Buffer.from('0000000000000000000000000000fc7b3364ffed', 'hex')
         expect(new Address(shorter).bytes).deep.equal(extended)
     })
 
@@ -46,16 +46,16 @@ describe('Address', () => {
 
 describe('Bytes32', () => {
     const pureHex = '9bcc6526a76ae560244f698805cc001977246cb92c2b4f1e2b7a204e445409ea'
-    const bytes = new Buffer(pureHex, 'hex')
+    const bytes = Buffer.from(pureHex, 'hex')
 
     it('constructor', () => {
         expect(new Bytes32(bytes).bytes).deep.equal(bytes)
 
-        let longer = new Buffer('ff' + pureHex, 'hex')
+        let longer = Buffer.from('ff' + pureHex, 'hex')
         expect(new Bytes32(longer).bytes).deep.equal(bytes)
 
-        let shorter = new Buffer('204e445409ea', 'hex')
-        let extended = new Buffer('0000000000000000000000000000000000000000000000000000204e445409ea', 'hex')
+        let shorter = Buffer.from('204e445409ea', 'hex')
+        let extended = Buffer.from('0000000000000000000000000000000000000000000000000000204e445409ea', 'hex')
         expect(new Bytes32(shorter).bytes).deep.equal(extended)
     })
 
@@ -88,19 +88,19 @@ describe('Bytes32', () => {
 
 describe('BigInt', () => {
     const pureHex = '9bcc6526a76ae560244f698805cc001977246cb92c2b4f1e2b7a204e445409ea'
-    const bytes = new Buffer(pureHex, 'hex')
+    const bytes = Buffer.from(pureHex, 'hex')
     const bn = new BigNumber('0x' + pureHex)
 
     it('construct', () => {
         expect(new BigInt(bytes).bytes).deep.equal(bytes)
-        expect(new BigInt(new Buffer('00' + pureHex, 'hex')).bytes).deep.equal(bytes)
-        expect(new BigInt(new Buffer('00', 'hex')).bytes).deep.equal(new Buffer(0))
+        expect(new BigInt(Buffer.from('00' + pureHex, 'hex')).bytes).deep.equal(bytes)
+        expect(new BigInt(Buffer.from('00', 'hex')).bytes).deep.equal(Buffer.alloc(0))
     })
 
     it('should parse', () => {
-        expect(BigInt.from(123).bytes).deep.equal(new Buffer([123]))
-        expect(BigInt.from('123').bytes).deep.equal(new Buffer([123]))
-        expect(BigInt.from('0x123').bytes).deep.equal(new Buffer([0x1, 0x23]))
+        expect(BigInt.from(123).bytes).deep.equal(Buffer.from([123]))
+        expect(BigInt.from('123').bytes).deep.equal(Buffer.from([123]))
+        expect(BigInt.from('0x123').bytes).deep.equal(Buffer.from([0x1, 0x23]))
         expect(BigInt.from(bn).bytes).deep.equal(bytes)
     })
 

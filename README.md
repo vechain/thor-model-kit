@@ -39,12 +39,12 @@ import { Transaction } from 'thor-model-kit'
 
 let body: Transaction.Body = {
     chainTag: 0x9a,
-    blockRef: new Buffer('0000000000000000', 'hex'),
+    blockRef: Buffer.from('0000000000000000', 'hex'),
     expiration: 32,
     clauses: [{
         to: Address.fromHex('7567d83b7b8d80addcb281a71d54fc7b3364ffed', ''),
         value: BigInt.from(10000),
-        data: new Buffer(0)
+        data: Buffer.alloc(0)
     }],
     gasPriceCoef: 128,
     gas: BigInt.from(21000),
