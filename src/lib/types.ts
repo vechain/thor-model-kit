@@ -14,7 +14,7 @@ function hexToBuffer(hex: string, prefix = '0x') {
     if (hex.length % 2 != 0) {
         throw new Error('odd hex')
     }
-    return new Buffer(hex, 'hex')
+    return Buffer.from(hex, 'hex')
 }
 
 /**
@@ -42,7 +42,7 @@ export class Address {
      * @param bytes 
      */
     constructor(bytes: Buffer) {
-        let b20 = new Buffer(20)
+        let b20 = Buffer.alloc(20)
         bytes.copy(b20,
             b20.length > bytes.length ? b20.length - bytes.length : 0,
             bytes.length > b20.length ? bytes.length - b20.length : 0)
@@ -82,7 +82,7 @@ export class Bytes32 {
      * @param bytes 
      */
     constructor(bytes: Buffer) {
-        let b32 = new Buffer(32)
+        let b32 = Buffer.alloc(32)
         bytes.copy(b32,
             b32.length > bytes.length ? b32.length - bytes.length : 0,
             bytes.length > b32.length ? bytes.length - b32.length : 0)
@@ -126,7 +126,7 @@ export class BigInt {
         if (hex.length % 2 != 0)
             hex = '0' + hex
 
-        return new BigInt(new Buffer(hex, 'hex'))
+        return new BigInt(Buffer.from(hex, 'hex'))
     }
     /** the underlying value */
     readonly bytes: Buffer

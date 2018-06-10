@@ -11,7 +11,7 @@ const blake = require('blakejs')
 export function blake2b256(...data: Buffer[]) {
     let ctx = blake.blake2bInit(32, null)
     data.forEach(d => blake.blake2bUpdate(ctx, d))
-    return new Bytes32(new Buffer(blake.blake2bFinal(ctx)))
+    return new Bytes32(Buffer.from(blake.blake2bFinal(ctx)))
 }
 
 /**
@@ -59,7 +59,7 @@ export namespace Secp256k1 {
      */
     export function sign(msgHash: Bytes32, privKey: Bytes32) {
         let sig = secp256k1.sign(msgHash.bytes, privKey.bytes)
-        let packed = new Buffer(65)
+        let packed = Buffer.alloc(65)
         sig.signature.copy(packed)
         packed[64] = sig.recovery
         return packed
