@@ -154,7 +154,7 @@ export class BigInt {
 
     /**
      * convert to string
-     * @param base the base, 16 or 10
+     * @param base the base, 16 or 10, defaults to 16
      */
     toString(base: 16 | 10 = 16) {
         let prefix = (base === 16) ? '0x' : ''
