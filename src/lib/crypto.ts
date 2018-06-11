@@ -6,21 +6,31 @@ const blake = require('blakejs')
 
 /**
  * computes blake2b 256bit hash of given data
- * @param data one or more Buffer
+ * @param data one or more Buffer | string
  */
-export function blake2b256(...data: Buffer[]) {
+export function blake2b256(...data: (Buffer | string)[]) {
     let ctx = blake.blake2bInit(32, null)
-    data.forEach(d => blake.blake2bUpdate(ctx, d))
+    data.forEach(d => {
+        if (Buffer.isBuffer(d))
+            blake.blake2bUpdate(ctx, d)
+        else
+            blake.blake2bUpdate(ctx, Buffer.from(d, 'utf8'))
+    })
     return new Bytes32(Buffer.from(blake.blake2bFinal(ctx)))
 }
 
 /**
  * computes keccak256 hash of given data
- * @param data one or more Buffer
+ * @param data one or more Buffer | string
  */
-export function keccak256(...data: Buffer[]) {
+export function keccak256(...data: (Buffer | string)[]) {
     let h = keccak('keccak256')
-    data.forEach(d => h.update(d))
+    data.forEach(d => {
+        if (Buffer.isBuffer(d))
+            h.update(d)
+        else
+            h.update(Buffer.from(d, 'utf8'))
+    })
     return new Bytes32(h.digest())
 }
 
