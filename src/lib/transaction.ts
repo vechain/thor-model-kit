@@ -84,11 +84,9 @@ export class Transaction {
 
     /** encode into Buffer */
     encode() {
-        if (!this.signature)
-            throw new Error('signature missing')
-
         let list = this.rlpList
-        list.push(this.signature)
+        if (this.signature)
+            list.push(this.signature)
         return rlp.encode(list) as Buffer
     }
 
