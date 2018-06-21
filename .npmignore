@@ -2,6 +2,7 @@ src/
 test/
 tsconfig.json
 tslint.json
+.travis.yml
 
 /.vscode/
 /coverage/
