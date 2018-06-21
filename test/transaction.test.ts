@@ -22,6 +22,7 @@ describe("transaction", () => {
         reserved: []
     }
     let unsigned = new Transaction(body)
+    console.log(unsigned.encode().toString('hex'))
 
     it('unsigned', () => {
         expect(unsigned.signingHash.toString()).equal('0x2a1c25ce0d66f45276a5f308b99bf410e2fc7d5b6ea37a49f2ab9f1da9446478')
@@ -39,7 +40,9 @@ describe("transaction", () => {
         expect(unsigned.gasPrice(BigInt.from(100))).deep.equal(BigInt.from(150))
         expect(unsigned.signature).to.be.undefined
         expect(() => { unsigned.signer }).to.throw()
-        expect(() => { unsigned.encode() }).to.throw()
+
+        let encoded = Buffer.from('f8540184aabbccdd20f840df947567d83b7b8d80addcb281a71d54fc7b3364ffed82271086000000606060df947567d83b7b8d80addcb281a71d54fc7b3364ffed824e208600000060606081808252088083bc614ec0', 'hex')
+        expect(unsigned.encode()).deep.equal(encoded)
     })
 
     it('invalid body', () => {
