@@ -22,7 +22,6 @@ describe("transaction", () => {
         reserved: []
     }
     let unsigned = new Transaction(body)
-    console.log(unsigned.encode().toString('hex'))
 
     it('unsigned', () => {
         expect(unsigned.signingHash.toString()).equal('0x2a1c25ce0d66f45276a5f308b99bf410e2fc7d5b6ea37a49f2ab9f1da9446478')
