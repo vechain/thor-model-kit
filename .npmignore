@@ -2,3 +2,7 @@ src/
 test/
 tsconfig.json
 tslint.json
+
+/.vscode/
+/coverage/
+/.nyc_output/
