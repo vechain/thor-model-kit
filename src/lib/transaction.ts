@@ -52,21 +52,7 @@ export class Transaction {
 
     /** returns intrinsic gas it takes */
     get intrinsicGas() {
-        const txGas = 5000
-        const clauseGas = 16000
-        const clauseGasContractCreation = 48000
-
-        if (this.body.clauses.length === 0)
-            return txGas + clauseGas
-
-        return this.body.clauses.reduce((sum, c) => {
-            if (c.to)
-                sum += clauseGas
-            else
-                sum += clauseGasContractCreation
-            sum += dataGas(c.data)
-            return sum
-        }, txGas)
+        return Transaction.intrinsicGas(this.body.clauses)
     }
 
     /**
@@ -165,6 +151,28 @@ export namespace Transaction {
         nonce: BigInt
         /** reserved fields, must be empty */
         reserved: any[]
+    }
+
+    /**
+     * calculates intrinsic gas that a tx costs with the given clauses.
+     * @param clauses 
+     */
+    export function intrinsicGas(clauses: Clause[]) {
+        const txGas = 5000
+        const clauseGas = 16000
+        const clauseGasContractCreation = 48000
+
+        if (clauses.length === 0)
+            return txGas + clauseGas
+
+        return clauses.reduce((sum, c) => {
+            if (c.to)
+                sum += clauseGas
+            else
+                sum += clauseGasContractCreation
+            sum += dataGas(c.data)
+            return sum
+        }, txGas)
     }
 }
 
