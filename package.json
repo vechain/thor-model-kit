@@ -1,6 +1,6 @@
 {
   "name": "thor-model-kit",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Typescript library defines VeChain Thor data models, to aid DApp development",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",

@@ -1,4 +1,8 @@
-# Thor Model Kit
+# ~~Thor Model Kit~~
+
+Deprecated, use [thor-devkit](https://github.com/vechain/thor-devkit.js) instead.
+
+
 
 Typescript library defines VeChain Thor data models, to aid DApp development.
 
